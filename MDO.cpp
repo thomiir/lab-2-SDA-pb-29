@@ -23,6 +23,9 @@ void MDO::adauga(TCheie c, TValoare v) {
         NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
         NodListaMica* anteriorListaMica = nullptr;
 
+        /// aici trebuie modificat, nu este neaparat sa se adauge valoarea la
+        /// sfarsitul listei
+        /// doar cheile sunt ordonate in functie de relatia R
         while (curentListaMica != nullptr && curentListaMica->valoare < v) {
             anteriorListaMica = curentListaMica;
             curentListaMica = curentListaMica->urmator;
@@ -66,10 +69,10 @@ void MDO::adauga(TCheie c, TValoare v) {
 
 vector<TValoare> MDO::cauta(TCheie c) const {
     NodListaMare* curentListaMare = inceputListaMare;
-    vector<TValoare> elemente;
     while (curentListaMare != nullptr) {
         if (curentListaMare->cheie == c) {
             NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
+            vector<TValoare> elemente;
             while (curentListaMica != nullptr) {
                 elemente.push_back(curentListaMica->valoare);
                 curentListaMica = curentListaMica->urmator;
@@ -78,7 +81,7 @@ vector<TValoare> MDO::cauta(TCheie c) const {
         }
         curentListaMare = curentListaMare->urmator;
     }
-    return elemente;
+    return vector<TValoare>();
 }
 
 bool MDO::sterge(TCheie c, TValoare v) {
@@ -90,15 +93,18 @@ bool MDO::sterge(TCheie c, TValoare v) {
             NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
             NodListaMica* anteriorListaMica = nullptr;
 
-            while (curentListaMica != nullptr) {
-                if (curentListaMica->valoare == v) {
+            while (curentListaMica != nullptr) 
+            {
+                if (curentListaMica->valoare == v) 
+                {
                     if (anteriorListaMica == nullptr)
                         curentListaMare->inceputListaMica = curentListaMica->urmator;
                     else
                         anteriorListaMica->urmator = curentListaMica->urmator;
                     delete curentListaMica;
 
-                    if (curentListaMare->inceputListaMica == nullptr) {
+                    if (curentListaMare->inceputListaMica == nullptr) 
+                    {
                         if (anteriorListaMare == nullptr)
                             inceputListaMare = curentListaMare->urmator;
                         else
@@ -115,15 +121,17 @@ bool MDO::sterge(TCheie c, TValoare v) {
         anteriorListaMare = curentListaMare;
         curentListaMare = curentListaMare->urmator;
     }
-    return false; // Key or value not found
+    return false;
 }
 
 int MDO::dim() const {
     NodListaMare* curentListaMare = inceputListaMare;
     int lg = 0;
-    while (curentListaMare != nullptr) {
+    while (curentListaMare != nullptr) 
+    {
         NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
-        while (curentListaMica != nullptr) {
+        while (curentListaMica != nullptr) 
+        {
             curentListaMica = curentListaMica->urmator;
             lg++;
         }
@@ -132,15 +140,18 @@ int MDO::dim() const {
     return lg;
 }
 
-bool MDO::vid() const {
+bool MDO::vid() const 
+{
     return inceputListaMare == nullptr;
 }
 
-IteratorMDO MDO::iterator() const {
+IteratorMDO MDO::iterator() const 
+{
     return IteratorMDO(*this);
 }
 
-MDO::~MDO() {
+MDO::~MDO() 
+{
     NodListaMare* curentListaMare = inceputListaMare;
     while (curentListaMare != nullptr) {
         NodListaMare* auxListaMare = curentListaMare;
