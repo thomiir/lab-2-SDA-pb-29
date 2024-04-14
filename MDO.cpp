@@ -6,9 +6,22 @@
 #include <exception>
 using namespace std;
 
-MDO::MDO(Relatie r) : relatie(r), inceputListaMare(nullptr) {};
+MDO::MDO(Relatie r)
+{
+    // constructorul clasei MDO
+    // 0(1)
 
-void MDO::adauga(TCheie c, TValoare v) {
+    relatie = r;
+    inceputListaMare = nullptr;
+}
+
+void MDO::adauga(TCheie c, TValoare v) 
+{
+    // adaugam un element in container
+    // caz favorabil (O(1)): cheia este pe prima pozitie in lista mare
+    // caz defavorabil (O(n)): cheia nu exista in lista mare
+    // caz mediu (O(n))
+
     NodListaMare* curentListaMare = inceputListaMare;
     NodListaMare* anteriorListaMare = nullptr;
 
@@ -22,58 +35,64 @@ void MDO::adauga(TCheie c, TValoare v) {
     {
         NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
         NodListaMica* anteriorListaMica = nullptr;
+        NodListaMica* nodNou = new NodListaMica;
+        nodNou->valoare = v;
 
-        /// aici trebuie modificat, nu este neaparat sa se adauge valoarea la
-        /// sfarsitul listei
-        /// doar cheile sunt ordonate in functie de relatia R
-        while (curentListaMica != nullptr && curentListaMica->valoare < v) {
-            anteriorListaMica = curentListaMica;
-            curentListaMica = curentListaMica->urmator;
-        }
-
-        NodListaMica* nouNod = new NodListaMica;
-        nouNod->valoare = v;
-
-        if (anteriorListaMica == nullptr) {
-            nouNod->urmator = curentListaMare->inceputListaMica;
-            curentListaMare->inceputListaMica = nouNod;
-        }
-        else {
-            nouNod->urmator = curentListaMica;
-            anteriorListaMica->urmator = nouNod;
-        }
-    }
-    else {
-        NodListaMare* nouNodMare = new NodListaMare;
-        nouNodMare->cheie = c;
-
-        NodListaMica* nouNodMica = new NodListaMica;
-        nouNodMica->valoare = v;
-
-        nouNodMica->urmator = nullptr;
-        nouNodMare->inceputListaMica = nouNodMica;
-
-        if (anteriorListaMare == nullptr) 
+        if (anteriorListaMica == nullptr) 
         {
-            nouNodMare->urmator = inceputListaMare;
-            inceputListaMare = nouNodMare;
+            nodNou->urmator = curentListaMare->inceputListaMica;
+            curentListaMare->inceputListaMica = nodNou;
         }
         else 
         {
-            nouNodMare->urmator = anteriorListaMare->urmator;
-            anteriorListaMare->urmator = nouNodMare;
+            nodNou->urmator = curentListaMica;
+            anteriorListaMica->urmator = nodNou;
+        }
+    }
+    
+    else 
+    {
+        NodListaMare* nodNouListaMare = new NodListaMare;
+        nodNouListaMare->cheie = c;
+
+        NodListaMica* nodNouListaMica = new NodListaMica;
+        nodNouListaMica->valoare = v;
+
+        nodNouListaMica->urmator = nullptr;
+        nodNouListaMare->inceputListaMica = nodNouListaMica;
+
+        if (anteriorListaMare == nullptr) 
+        {
+            nodNouListaMare->urmator = inceputListaMare;
+            inceputListaMare = nodNouListaMare;
+        }
+        else 
+        {
+            nodNouListaMare->urmator = anteriorListaMare->urmator;
+            anteriorListaMare->urmator = nodNouListaMare;
         }
     }
 }
 
 
-vector<TValoare> MDO::cauta(TCheie c) const {
+vector<TValoare> MDO::cauta(TCheie c) const 
+{
+    // cautam si returnam lista de elemente retinuta la o anumita cheie
+    // caz favorabil (O(n)): cheia este pe prima pozitie in dictionar
+    // caz defavorabil (O(n^2)): cheia este pe ultima pozitie in dictionar
+    // caz mediu (O(n^2))
+    // cauta (TCheie c) <- vectorul de elemente, daca cheia c exista in dictionar
+    //                  <- vectorul vid, in caz contrar
+
     NodListaMare* curentListaMare = inceputListaMare;
-    while (curentListaMare != nullptr) {
-        if (curentListaMare->cheie == c) {
+    while (curentListaMare != nullptr) 
+    {
+        if (curentListaMare->cheie == c) 
+        {
             NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
             vector<TValoare> elemente;
-            while (curentListaMica != nullptr) {
+            while (curentListaMica != nullptr) 
+            {
                 elemente.push_back(curentListaMica->valoare);
                 curentListaMica = curentListaMica->urmator;
             }
@@ -84,15 +103,26 @@ vector<TValoare> MDO::cauta(TCheie c) const {
     return vector<TValoare>();
 }
 
-bool MDO::sterge(TCheie c, TValoare v) {
+bool MDO::sterge(TCheie c, TValoare v) 
+{
+    // stergem perechea <TCheie, TValoare> din container
+    // caz favorabil (O(1)): elementul este pe prima pozitie in lista mare, pe prima 
+    //                       pozitie in lista mica
+    // caz defavorabil (O(n^2)): elementul este pe ultima pozitie in lista mare, pe ultima
+    //                           pozitie in lista mica
+    // caz mediu (O(n^2)) 
+    // sterge (TCheie c, TValoare v) <- true, daca s-a sters un element din container
+    //                               <- false, in caz contrar
+
     NodListaMare* curentListaMare = inceputListaMare;
     NodListaMare* anteriorListaMare = nullptr;
 
-    while (curentListaMare != nullptr) {
-        if (curentListaMare->cheie == c) {
+    while (curentListaMare != nullptr) 
+    {
+        if (curentListaMare->cheie == c) 
+        {
             NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
             NodListaMica* anteriorListaMica = nullptr;
-
             while (curentListaMica != nullptr) 
             {
                 if (curentListaMica->valoare == v) 
@@ -111,7 +141,6 @@ bool MDO::sterge(TCheie c, TValoare v) {
                             anteriorListaMare->urmator = curentListaMare->urmator;
                         delete curentListaMare;
                     }
-
                     return true;
                 }
                 anteriorListaMica = curentListaMica;
@@ -124,7 +153,12 @@ bool MDO::sterge(TCheie c, TValoare v) {
     return false;
 }
 
-int MDO::dim() const {
+int MDO::dim() const 
+{
+    // calculam si returnam dimensiunea containerului
+    // 0(n^2)
+    // dim() <- numarul de elemente din container
+
     NodListaMare* curentListaMare = inceputListaMare;
     int lg = 0;
     while (curentListaMare != nullptr) 
@@ -142,25 +176,39 @@ int MDO::dim() const {
 
 bool MDO::vid() const 
 {
+    // verificam daca containerul este vid
+    // 0(1)
+    // vid() <- true, daca inceputul listei mari este pointerul nul
+    //       <- false, altfel
+
     return inceputListaMare == nullptr;
 }
 
 IteratorMDO MDO::iterator() const 
 {
+    // returnam un iterator pe container
+    // 0(1)
+
     return IteratorMDO(*this);
 }
 
 MDO::~MDO() 
 {
+    // destructorul clasei MDO
+    // 0(n^2)
+    // eliberam spatiul alocat nodurilor din liste
+
     NodListaMare* curentListaMare = inceputListaMare;
-    while (curentListaMare != nullptr) {
-        NodListaMare* auxListaMare = curentListaMare;
+    while (curentListaMare != nullptr) 
+    {
         NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
-        while (curentListaMica != nullptr) {
+        while (curentListaMica != nullptr) 
+        {
             NodListaMica* auxListaMica = curentListaMica;
             curentListaMica = curentListaMica->urmator;
             delete auxListaMica;
         }
+        NodListaMare* auxListaMare = curentListaMare;
         curentListaMare = curentListaMare->urmator;
         delete auxListaMare;
     }

@@ -1,48 +1,63 @@
 #include "IteratorMDO.h"
 #include "MDO.h"
-IteratorMDO::IteratorMDO(const MDO& d) : dict(d) {
-    // Initialize the iterator to point to the beginning of the MDO
+IteratorMDO::IteratorMDO(const MDO& d) : dict(d) 
+{
+    // constructorul clasei iterator
+    // 0(1)
+
+
     iteratorListaMare = dict.inceputListaMare;
-    if (iteratorListaMare != nullptr) {
-        // If the MDO is not empty, initialize the iterator for the first key
+    if (iteratorListaMare != nullptr)
         iteratorListaMica = iteratorListaMare->inceputListaMica;
-    }
 }
 
-void IteratorMDO::prim() {
-    // Move the iterator to the first key-value pair
-    iteratorListaMare = dict.inceputListaMare;
-    if (iteratorListaMare != nullptr) {
-        iteratorListaMica = iteratorListaMare->inceputListaMica;
-    }
+void IteratorMDO::prim()
+{
+    // mutam iteratorul la primul element din container
+    // 0(1)
+
+    iteratorListaMare = dict.inceputListaMare; 
+    if (iteratorListaMare != nullptr) 
+        iteratorListaMica = iteratorListaMare->inceputListaMica; 
+    else
+        iteratorListaMica = nullptr;
 }
 
-void IteratorMDO::urmator() {
-    if (iteratorListaMare != nullptr) {
-        if (iteratorListaMica != nullptr && iteratorListaMica->urmator != nullptr) {
-            // Move to the next element in the current list associated with the key
+void IteratorMDO::urmator() 
+{
+    // mutam iteratorul la urmatorul element
+    // daca am ajuns la finalul unei liste mici, trecem la urmatorul nod in lista mare
+    // O(1)
+
+    if (iteratorListaMare != nullptr)
+        if (iteratorListaMica->urmator != nullptr)
             iteratorListaMica = iteratorListaMica->urmator;
-        }
-        else {
-            // If there are no more elements in the current list, move to the next key
+        else 
+        {
             iteratorListaMare = iteratorListaMare->urmator;
-            if (iteratorListaMare != nullptr) {
+            if (iteratorListaMare != nullptr) 
                 iteratorListaMica = iteratorListaMare->inceputListaMica;
-            }
         }
-    }
 }
 
-bool IteratorMDO::valid() const {
-    // Check if the iterator is currently pointing to a valid key-value pair
+bool IteratorMDO::valid() const 
+{
+    // verificam daca iteratorul este valid
+    // 0(1)
+    // valid() <- true, daca ambii iteratori sunt diferiti de pointerul nul
+    //         <- false, in caz contrar
+
     return iteratorListaMare != nullptr && iteratorListaMica != nullptr;
 }
 
-TElem IteratorMDO::element() const {
-    // Return the key-value pair pointed to by the iterator
+TElem IteratorMDO::element() const 
+{
+    // returnam elementul curent
+    // 0(1)
+    // element() <- perechea <TCheie, TValoare>, daca iteratorul este valid
+    //           <- perechea <-1, -1> in caz contrar
+
     if (valid()) 
         return pair<TCheie, TValoare>(iteratorListaMare->cheie, iteratorListaMica->valoare);
-
-    // Return a default pair if the iterator is not valid
     return pair<TCheie, TValoare>(-1, -1);
 }

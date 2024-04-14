@@ -9,6 +9,10 @@ class IteratorMDO
 
 	private:
 
+		// iteratorul are doua campuri: un nod pe care il folosim pentru lista mare
+		// iar fiecare nod din lista mare are cate un pointer la primul nod din lista
+		// mica corespunzatoare acestuia
+
 		NodListaMare* iteratorListaMare;
 		NodListaMica* iteratorListaMica;
 

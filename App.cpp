@@ -3,8 +3,9 @@
 #include "TestScurt.h"
 #include "TestExtins.h"
 
-int main(){
+int main()
+{
     testAll();
     testAllExtins();
-    std::cout<<"Finished Tests!"<<std::endl;
+    std::cout << "Finished Tests!" << std::endl;
 }
