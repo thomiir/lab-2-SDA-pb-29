@@ -79,8 +79,8 @@ vector<TValoare> MDO::cauta(TCheie c) const
 {
     // cautam si returnam lista de elemente retinuta la o anumita cheie
     // caz favorabil (O(n)): cheia este pe prima pozitie in dictionar
-    // caz defavorabil (O(n^2)): cheia este pe ultima pozitie in dictionar
-    // caz mediu (O(n^2))
+    // caz defavorabil (O(n)): cheia este pe ultima pozitie in dictionar
+    // caz mediu (O(n))
     // cauta (TCheie c) <- vectorul de elemente, daca cheia c exista in dictionar
     //                  <- vectorul vid, in caz contrar
 
@@ -156,7 +156,7 @@ bool MDO::sterge(TCheie c, TValoare v)
 int MDO::dim() const 
 {
     // calculam si returnam dimensiunea containerului
-    // 0(n^2)
+    // 0(dim)
     // dim() <- numarul de elemente din container
 
     NodListaMare* curentListaMare = inceputListaMare;
@@ -195,7 +195,7 @@ IteratorMDO MDO::iterator() const
 MDO::~MDO() 
 {
     // destructorul clasei MDO
-    // 0(n^2)
+    // 0(dim)
     // eliberam spatiul alocat nodurilor din liste
 
     NodListaMare* curentListaMare = inceputListaMare;

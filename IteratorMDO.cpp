@@ -27,7 +27,7 @@ void IteratorMDO::urmator()
 {
     // mutam iteratorul la urmatorul element
     // daca am ajuns la finalul unei liste mici, trecem la urmatorul nod in lista mare
-    // O(1)
+    // 0(1)
 
     if (iteratorListaMare != nullptr)
         if (iteratorListaMica->urmator != nullptr)
