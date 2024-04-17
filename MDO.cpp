@@ -13,6 +13,7 @@ MDO::MDO(Relatie r)
 
     relatie = r;
     inceputListaMare = nullptr;
+    lg = 0;
 }
 
 void MDO::adauga(TCheie c, TValoare v) 
@@ -72,15 +73,16 @@ void MDO::adauga(TCheie c, TValoare v)
             anteriorListaMare->urmator = nodNouListaMare;
         }
     }
+    lg++;
 }
 
 
 vector<TValoare> MDO::cauta(TCheie c) const 
 {
     // cautam si returnam lista de elemente retinuta la o anumita cheie
-    // caz favorabil (O(n)): cheia este pe prima pozitie in dictionar
-    // caz defavorabil (O(n)): cheia este pe ultima pozitie in dictionar
-    // caz mediu (O(n))
+    // caz favorabil (O(n)): elementul este pe prima pozitie in lista mare
+    // caz defavorabil (O(dim+n)): elementul este pe ultima pozitie in lista mare
+    // caz mediu (O(dim+n))
     // cauta (TCheie c) <- vectorul de elemente, daca cheia c exista in dictionar
     //                  <- vectorul vid, in caz contrar
 
@@ -108,9 +110,9 @@ bool MDO::sterge(TCheie c, TValoare v)
     // stergem perechea <TCheie, TValoare> din container
     // caz favorabil (O(1)): elementul este pe prima pozitie in lista mare, pe prima 
     //                       pozitie in lista mica
-    // caz defavorabil (O(n^2)): elementul este pe ultima pozitie in lista mare, pe ultima
-    //                           pozitie in lista mica
-    // caz mediu (O(n^2)) 
+    // caz defavorabil (O(dim+n)): elementul este pe ultima pozitie in lista 
+    //                             mare, pe ultima pozitie in lista mica
+    // caz mediu (O(dim+n)) 
     // sterge (TCheie c, TValoare v) <- true, daca s-a sters un element din container
     //                               <- false, in caz contrar
 
@@ -141,6 +143,7 @@ bool MDO::sterge(TCheie c, TValoare v)
                             anteriorListaMare->urmator = curentListaMare->urmator;
                         delete curentListaMare;
                     }
+                    lg--;
                     return true;
                 }
                 anteriorListaMica = curentListaMica;
@@ -156,21 +159,9 @@ bool MDO::sterge(TCheie c, TValoare v)
 int MDO::dim() const 
 {
     // calculam si returnam dimensiunea containerului
-    // 0(dim)
+    // 0(1)
     // dim() <- numarul de elemente din container
 
-    NodListaMare* curentListaMare = inceputListaMare;
-    int lg = 0;
-    while (curentListaMare != nullptr) 
-    {
-        NodListaMica* curentListaMica = curentListaMare->inceputListaMica;
-        while (curentListaMica != nullptr) 
-        {
-            curentListaMica = curentListaMica->urmator;
-            lg++;
-        }
-        curentListaMare = curentListaMare->urmator;
-    }
     return lg;
 }
 
@@ -195,8 +186,8 @@ IteratorMDO MDO::iterator() const
 MDO::~MDO() 
 {
     // destructorul clasei MDO
-    // 0(dim)
     // eliberam spatiul alocat nodurilor din liste
+    // 0(dim)
 
     NodListaMare* curentListaMare = inceputListaMare;
     while (curentListaMare != nullptr) 

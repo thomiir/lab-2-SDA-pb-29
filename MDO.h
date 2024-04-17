@@ -27,6 +27,7 @@ class MDO {
     private:
 		NodListaMare* inceputListaMare;
 		Relatie relatie;
+		int lg;
 
     public:
 
