@@ -163,9 +163,53 @@ void testIterator() {
 	testIterator(desc);
 }
 
+void testIntoarce()
+{
+	MDO d = MDO(cresc);
+	d.adauga(1, 100);
+	d.adauga(1, 200);
+	d.adauga(1, 300);
+	d.adauga(1, 400);
+	d.adauga(1, 500);
+	d.adauga(2, 100);
+	d.adauga(2, 200);
+	d.adauga(2, 300);
+	d.adauga(2, 400);
+	d.adauga(2, 500);
+
+	IteratorMDO it = d.iterator();
+	it.prim();
+	it.urmator();
+	it.urmator();
+	it.urmator();
+	it.urmator();
+	// am ajuns la (1,100)
+	it.revinoKpasi(2);
+	// ne-am intors la (1,300)
+	TElem x = pair<TCheie, TValoare>(1, 300);
+	assert (it.element() == x);
+	it.revinoKpasi(1);
+	//ne-am intors la (1,400)
+	TElem y = pair<TCheie, TValoare>(1, 400);
+	assert (it.element() == y);
+
+	it.prim();
+	try
+	{
+		it.revinoKpasi(5);
+		assert(false);
+	}
+	catch (...)
+	{
+		assert (true);
+	}
+	
+}
+
 void testAllExtins() {
 	testCreeaza();
 	testCauta();
 	testSterge();
 	testIterator();
+	testIntoarce();
 }

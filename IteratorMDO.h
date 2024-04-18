@@ -40,5 +40,7 @@ class IteratorMDO
 		//returneaza valoarea elementului din container referit de iterator
 		//arunca exceptie daca iteratorul nu e valid
 		TElem element() const;
+
+		void revinoKpasi(int k);
 };
 

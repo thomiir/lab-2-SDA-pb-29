@@ -61,3 +61,35 @@ TElem IteratorMDO::element() const
         return pair<TCheie, TValoare>(iteratorListaMare->cheie, iteratorListaMica->valoare);
     return pair<TCheie, TValoare>(-1, -1);
 }
+
+void IteratorMDO::revinoKpasi(int k)
+{
+    // revino k pasi in dictionar
+    IteratorMDO it = dict.iterator();
+    it.prim();
+    int pozCurent = 1;
+    
+    // iteram dictionarul pana la pozitia elementului curent
+    while (it.element() != element())
+    {
+        it.urmator();
+        pozCurent++;
+    }
+
+    // iteram dictionarul pana la pozitia curenta minus cei k pasi
+    int poz = 1;
+    it.prim();
+    if (pozCurent >= k)
+    {
+        while (poz != pozCurent - k)
+        {
+            it.urmator();
+            poz++;
+        }
+        // mutam iteratorul
+        iteratorListaMare = it.iteratorListaMare;
+        iteratorListaMica = it.iteratorListaMica;
+    }
+    else
+        throw 1;   
+}
